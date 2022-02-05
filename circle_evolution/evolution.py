@@ -37,12 +37,40 @@ class Evolution:
 
         self.specie = Specie(size=self.size, genes=genes)
 
+    # def mutate(self):
+    #     """Mutates specie for evolution.
+
+    #     Args:
+    #         specie (species.Specie): Specie to mutate.
+
+    #     Returns:
+    #         New Specie class, that has been mutated.
+    #     """
+    #     # new_specie = Specie(size=self.size, genotype=np.array(specie.genotype))
+    #     specie = self.specie
+    #     # Randomization for Evolution
+    #     y = random.randint(0, self.genes - 1)
+    #     change = random.randint(0, specie.genotype_width + 1)
+
+    #     if change >= specie.genotype_width + 1:
+    #         change -= 1
+    #         i, j = y, random.randint(0, self.genes - 1)
+    #         i, j, s = (i, j, -1) if i < j else (j, i, 1)
+    #         specie.genotype[i : j + 1] = np.roll(specie.genotype[i : j + 1], shift=s, axis=0)
+    #         y = j
+
+    #     selection = np.random.choice(specie.genotype_width, size=change, replace=False)
+
+    #     if random.random() < 0.25:
+    #         specie.genotype[y, selection] = np.random.rand(change)
+    #     else:
+    #         specie.genotype[y, selection] += (np.random.rand(change) - 0.5) / 3
+    #         specie.genotype[y, selection] = np.clip(specie.genotype[y, selection], 0, 1)
+
     def mutate(self, specie):
         """Mutates specie for evolution.
-
         Args:
             specie (species.Specie): Specie to mutate.
-
         Returns:
             New Specie class, that has been mutated.
         """
@@ -60,14 +88,15 @@ class Evolution:
             y = j
 
         selection = np.random.choice(new_specie.genotype_width, size=change, replace=False)
-
+        
         if random.random() < 0.25:
-            new_specie.genotype[y, selection] = np.random.rand(len(selection))
+            new_specie.genotype[y, selection] = np.random.rand(change)
         else:
-            new_specie.genotype[y, selection] += (np.random.rand(len(selection)) - 0.5) / 3
+            new_specie.genotype[y, selection] += (np.random.rand(change) - 0.5) / 3
             new_specie.genotype[y, selection] = np.clip(new_specie.genotype[y, selection], 0, 1)
 
         return new_specie
+
 
     def print_progress(self, fit):
         """Prints progress of Evolution.
@@ -75,9 +104,9 @@ class Evolution:
         Args:
             fit (float): fitness value of specie.
         """
-        print("GEN {}, FIT {:.8f}".format(self.generation, fit))
+        print(f"   GEN {self.generation} , FIT {fit:.8f}")
 
-    def evolve(self, fitness=fitness.MSEFitness, max_generation=100000):
+    def evolve(self, fitness=fitness.MSEFitness, max_generation=100000, prog=None):
         """Genetic Algorithm for evolution.
 
         Call this function to begin evolving a Specie.
@@ -101,4 +130,9 @@ class Evolution:
             if newfit > fit:
                 fit = newfit
                 self.specie = mutated
+            if i %100 == 0:
+                if prog:
+                    prog(self.generation)
                 self.print_progress(newfit)
+
+            
