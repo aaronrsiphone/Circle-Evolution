@@ -18,13 +18,13 @@ with open('README.md') as f:
     long_description = f.read()
 
 # Library dependencies
-INSTALL_REQUIRES = ["opencv-python==4.2.0.34", "numpy==1.18.4", "matplotlib==3.2.1", "scikit-image==0.17.2"]
+INSTALL_REQUIRES = ["opencv-python>=4.2.0.34", "numpy>=1.18.4", "matplotlib>=3.2.1", "scikit-image>=0.17.2"]
 
 # Testing dependencies
 TEST_REQUIRES = [
     "pytest<5.4.0",
-    "pytest-cov==2.8.1",
-    "pytest-sugar==0.9.2",
+    "pytest-cov>=2.8.1",
+    "pytest-sugar>=0.9.2",
     "black",
     "pre-commit",
     "flake8",
